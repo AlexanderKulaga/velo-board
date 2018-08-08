@@ -1,44 +1,44 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Velo Catalog</title>
+    <link rel="shortcut icon" href="http://bootstrap-3.ru/assets/ico/favicon.ico">
 
     {% load static %}
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="{% static 'velostore/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'velostore/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'velostore/css/bootstrap-theme.min.css' %}">
+    <link rel="stylesheet" href="{% static 'velostore/css/styles.css' %}">
 </head>
 <body>
-
-        <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
-          <div class="container">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href={% url 'landing' %}>VeloCatalog</a>
-            </div>
-            <div class="collapse navbar-collapse">
-              <ul class="nav navbar-nav">
-                <li><a href={% url 'landing' %}>Главная</a></li>
-                <li><a href={% url 'popular' %}>Популярные</a></li>
-                <li><a href={% url 'popular' %}>API docs</a></li>
-                <li>
-                    <form action={% url 'find_page' %} method="get" class="form-search" >
-                        <div class="input-append search-nav">
-                            <input type="text" name="find_word" class="span2 search-query" placeholder="Поиск">
-                            <button type="submit" class="btn">Найти</button>
-                        </div>
-                    </form>
-                </li>
-              </ul>
-            </div><!-- /.nav-collapse -->
-          </div><!-- /.container -->
-      </div><!-- /.navbar -->
+    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href={% url 'landing' %}>VeloCatalog</a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href={% url 'landing' %}>Главная</a></li>
+            <li><a href={% url 'popular' %}>Популярные</a></li>
+            <li><a href={% url 'docs' %}>API docs</a></li>
+            <li>
+                <form action={% url 'find_page' %} method="get" class="form-search" >
+                    <div class="input-append search-nav">
+                        <input type="text" name="find_word" class="span2 search-query" placeholder="Поиск">
+                        <button type="submit" class="btn">Найти</button>
+                    </div>
+                </form>
+            </li>
+          </ul>
+        </div><!-- /.nav-collapse -->
+      </div><!-- /.container -->
+    </div><!-- /.navbar -->
 
       <div class="row">
           <div class="col-xs-12 col-sm-9">

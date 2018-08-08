@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Velo Catalog</title>
+    <link rel="shortcut icon" href="http://bootstrap-3.ru/assets/ico/favicon.ico">
     {% load static %}
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="{% static 'velostore/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'velostore/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'velostore/css/bootstrap-theme.min.css' %}">
+    <link rel="stylesheet" href="{% static 'velostore/css/styles.css' %}">
 </head>
+
 <body>
       <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
           <div class="container">
+
             <div class="navbar-header">
               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
@@ -19,12 +22,13 @@
                 <span class="icon-bar"></span>
               </button>
               <a class="navbar-brand" href={% url 'landing' %}>VeloCatalog</a>
-            </div>
+            </div><!-- /.navbar-header -->
+
             <div class="collapse navbar-collapse">
               <ul class="nav navbar-nav">
                 <li><a href={% url 'landing' %}>Главная</a></li>
                 <li class="active"><a href={% url 'popular' %}>Популярные</a></li>
-                <li><a href={% url 'popular' %}>API docs</a></li>
+                <li><a href={% url 'docs' %}>API docs</a></li>
                 <li>
                     <form action={% url 'find_page' %} method="get" class="form-search" >
                         <div class="input-append search-nav">
@@ -38,18 +42,18 @@
           </div><!-- /.container -->
       </div><!-- /.navbar -->
 
-        <div class="row">
+      <div class="row">
             <div class="col-xs-12 col-sm-9">
                 <div class="row"><h1 class = "col-6 col-sm-6 col-lg-4 popular-content">Популярные марки:</h1></div>
-              <div class="row">
-                  {% for post in posts %}
+              {% for post in posts %}
+                <div class="row">
                       <div class="col-6 col-sm-6 col-lg-4 popular-content post-block">
                           <h2>{{ post.mark }}</h2>
                       </div><!--/span-->
-                  {% endfor %}
-              </div><!--/row-->
+                </div><!--/row-->
+              {% endfor %}
             </div><!--/span-->
-        </div>
-        <a href= {% url 'landing' %}><button type="button" class="btn btn-primary back-button" >Вернуться</button></a>
+      </div>
+      <a href= {% url 'landing' %}><button type="button" class="btn btn-primary back-button" >Вернуться</button></a>
 </body>
 </html>

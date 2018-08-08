@@ -17,10 +17,9 @@
     <![endif]-->
 
     {% load static %}
-
-    <link rel="stylesheet" href="{% static 'velostore/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'velostore/bootstrap-theme.min.css' %}">
-    <link rel="stylesheet" href="{% static 'velostore/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'velostore/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'velostore/css/bootstrap-theme.min.css' %}">
+    <link rel="stylesheet" href="{% static 'velostore/css/styles.css' %}">
 </head>
 
 <body>
@@ -39,7 +38,7 @@
           <ul class="nav navbar-nav">
             <li class="active"><a href={% url 'landing' %}>Главная</a></li>
             <li><a href={% url 'popular' %}>Популярные</a></li>
-            <li><a href={% url 'popular' %}>API docs</a></li>
+            <li><a href={% url 'docs' %}>API docs</a></li>
             <li>
                 <form action={% url 'find_page' %} method="get" class="form-search" >
                     <div class="input-append search-nav">
@@ -50,53 +49,45 @@
             </li>
           </ul>
         </div><!-- /.nav-collapse -->
-
-
       </div><!-- /.container -->
     </div><!-- /.navbar -->
 
     <div class="container content">
+        <div class="row row-offcanvas row-offcanvas-right">
+            <div class="col-xs-12 col-sm-9">
+                <div class="row">
+                    {% for post in posts %}
+                        <div class="col-12 col-sm-12 col-lg-8 post-block">
+                            <h4><b>Название:</b> {{ post.title }}</h4>
+                            <p><b>Марка:</b>{{ post.mark }}</p>
+                            <p><b>Цена:</b>
+                            {% if post.price == None %}
+                                Не указана
+                            {% else %}
+                                {{ post.price }}
+                            {% endif %}
+                            </p>
+                            <p><b>Email:</b> {{ post.email }}</p>
+                            <p><b>Телефон:</b> {{ post.phone_number }}</p>
+                        </div><!--/span-->
+                    {% endfor %}
+                </div><!--/row-->
+            </div><!--/span-->
+            <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
 
-      <div class="row row-offcanvas row-offcanvas-right">
+            <form action={% url 'add' %} method="post" role="form">
+                {% csrf_token %}
+                <h2 class="form-signin-heading">Новое объявление</h2>
+                <input type="text" name="title" class="form-control" placeholder="Название*" maxlength="40" required>
+                <input type="text" name="mark" class="form-control" placeholder="Марка*" maxlength="40" required>
+                <input type="number" name="price" class="form-control" placeholder="Цена">
+                <input type="email" name="email" class="form-control" placeholder="Email*" maxlength="40" required>
+                <input type="tel" name="phone" class="form-control" id="phone" pattern="^\+7\d{3}\d{7}$" placeholder="Телефон*" maxlength="18" required>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Отправить</button>
+            </form>
 
-        <div class="col-xs-12 col-sm-9">
-          <div class="row">
-              {% for post in posts %}
-                  <div class="col-12 col-sm-12 col-lg-8 post-block">
-                      <h4><b>Название:</b> {{ post.title }}</h4>
-                      <p><b>Марка:</b>{{ post.mark }}</p>
-                      <p><b>Цена:</b>
-                          {% if post.price == None %}
-                              Не указана
-                          {% else %}
-                              {{ post.price }}
-                          {% endif %}
-                      </p>
-                      <p><b>Email:</b> {{ post.email }}</p>
-                      <p><b>Телефон:</b> {{ post.phone_number }}</p>
-                  </div><!--/span-->
-              {% endfor %}
-
-          </div><!--/row-->
-        </div><!--/span-->
-      <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-
-          <form action={% url 'add' %} method="post" role="form">
-            {% csrf_token %}
-            <h2 class="form-signin-heading">Новое объявление</h2>
-            <input type="text" name="title" class="form-control" placeholder="Название*" maxlength="40" required>
-            <input type="text" name="mark" class="form-control" placeholder="Марка*" maxlength="40" required>
-            <input type="number" name="price" class="form-control" placeholder="Цена">
-            <input type="email" name="email" class="form-control" placeholder="Email*" maxlength="40" required>
-            <input type="tel" name="phone" class="form-control" id="phone" pattern="^\+7\d{3}\d{7}$" placeholder="Телефон*" maxlength="18" required>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Отправить</button>
-          </form>
-
-    </div>
-
-      </div><!--/row-->
-
-
+            </div>
+        </div><!--/row-->
 
         <div class="row">
             <div class="large-3 large-offset-5 columns">
@@ -106,6 +97,7 @@
                     {% else %}
                         <li class="arrow unavailable"><a href="">&laquo;</a></li>
                     {% endif %}
+
                     {% for page in posts.paginator.page_range %}
                         {% if page == posts.number %}
                             <li class="current active"><a href="/page/{{ page }}/">{{ page }}</a></li>
@@ -121,18 +113,11 @@
                 </ul>
             </div>
         </div>
-
-
-
-      <footer>
-
-      </footer>
     </div><!--/.container-->
 
-    <script src="{% static 'velostore/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'velostore/bootstrap.min.js' %}"></script>
-    <script src="{% static 'velostore/jquery.maskedinput.min.js' %}"></script>
-
+    <script src="{% static 'velostore/js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'velostore/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'velostore/js/jquery.maskedinput.min.js' %}"></script>
     <script>
         $(function(){
           $("#phone").mask("+79999999999");

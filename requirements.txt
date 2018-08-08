@@ -1,4 +1,8 @@
 Django==2.1
 django-bootstrap3==10.0.1
+django-tastypie==0.14.1
 djangorestframework==3.8.2
+python-dateutil==2.7.3
+python-mimeparse==1.6.0
 pytz==2018.5
+six==1.11.0

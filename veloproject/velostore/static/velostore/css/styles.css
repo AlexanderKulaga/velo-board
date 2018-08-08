@@ -1,3 +1,7 @@
+body{
+    background-color: #F2F2F2;
+}
+
 .post-block{
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2), 0 2px 10px 0 rgba(0,0,0,0.12);
     transition: all 0.5s ease 0s;
@@ -20,12 +24,10 @@
     font-size: 25px;
 }
 
-body{
-    /*background-image: url(1.jpg);*/
-    background-color: #F2F2F2;
-}
-
 .back-button {
     margin-top: 50px;
 }
 
+.doc-block{
+    font-size: 20px;
+}
