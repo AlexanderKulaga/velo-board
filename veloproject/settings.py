@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'i9)f1+-+5z45@6993&3c2@oflkwu(4^)av4!t+g+$3!3q_@0^q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['alexanderkulaga.pythonanywhere.com',]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -78,8 +78,10 @@ WSGI_APPLICATION = 'veloproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'velodata',
+        'USER': 'velouser',
+        'PASSWORD': '12345678',
     }
 }
 
