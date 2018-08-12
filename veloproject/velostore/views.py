@@ -1,4 +1,13 @@
 import re
+
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
+from django.views.generic import TemplateView, FormView
+from django.views.generic.base import View
+from django.contrib import auth
+from django.contrib.auth import login
+from django.contrib.auth import logout
+
 from veloproject.velostore.models import Post
 from django.db.models import Count, Q
 from django.http import HttpResponseRedirect, HttpResponse
@@ -8,57 +17,105 @@ from django.core.paginator import Paginator
 from rest_framework.utils import json
 
 
-def index(request, page_number=1):
-    posts = Post.objects.all().order_by('id').reverse()
-    current_page = Paginator(posts, 4)
-    marks = Post.objects.values('mark')\
-        .annotate(mark_count=Count('mark'))\
-        .filter(mark_count__gte=1)\
-        .order_by('mark_count')
-    context = {'posts': current_page.page(page_number), 'marks': marks}
-    return render(request, 'index.html', context)
+class RegisterFormView(FormView):
+    form_class = UserCreationForm
+    success_url = '/login'
+    template_name = 'register.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect('/')
+        return super(RegisterFormView, self).get(self, request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.save()
+        return super(RegisterFormView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(RegisterFormView, self).form_invalid(form)
 
 
-def add(request):
-    if request.POST:
-        title = request.POST['title']
-        mark = request.POST['mark']
-        price = request.POST['price']
-        email = request.POST['email']
-        phone = request.POST['phone']
-        if price == '':
-            Post.objects.create(title=title, mark=mark, price=None, email=email, phone_number=phone)
-        else:
-            Post.objects.create(title=title, mark=mark, price=price, email=email, phone_number=phone)
-    return HttpResponseRedirect('/')
+class LoginFormView(FormView):
+    form_class = AuthenticationForm
+    success_url = '/'
+    template_name = 'login.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect('/')
+        return super(LoginFormView, self).get(self, request, *args, **kwargs)
+
+    def form_valid(self, form):
+        self.user = form.get_user()
+
+        login(self.request, self.user)
+        return super(LoginFormView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        return super(LoginFormView, self).form_invalid(form)
 
 
-def find_page(request):
-    if request.GET:
-        find_word = request.GET['find_word']
-
-        found = Post.objects.values('id', 'title', 'mark', 'price', 'phone_number', 'email') \
-            .filter(
-            Q(title__icontains=find_word.lower()) |
-            Q(mark__icontains=find_word.lower()))
-        context = {'posts': found}
-
-        return render(request, 'find_page.html', context)
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return HttpResponseRedirect("/")
 
 
-def popular(request):
-    populars = Post.objects.values('mark')\
-        .annotate(mark_count=Count('mark'))\
-        .filter(mark_count__gte=5)\
-        .order_by('mark_count')\
-        .reverse()
+class IndexView(View):
+    def get(self, request, page_number=1):
+        posts = Post.objects.all().order_by('id').reverse()
+        current_page = Paginator(posts, 4)
+        marks = Post.objects.values('mark')\
+            .annotate(mark_count=Count('mark'))\
+            .filter(mark_count__gte=1)\
+            .order_by('mark_count')
+        context = {'posts': current_page.page(page_number), 'marks': marks}
+        return render(request, 'index.html', context)
 
-    context = {'posts': populars}
-    return render(request, 'popular.html', context)
+
+class AddView(View):
+    def post(self, request):
+        if request.POST:
+            title = request.POST['title']
+            mark = request.POST['mark']
+            price = request.POST['price']
+            email = request.POST['email']
+            phone = request.POST['phone']
+            if price == '':
+                Post.objects.create(title=title, mark=mark, price=None, email=email, phone_number=phone, name=request.user)
+            else:
+                Post.objects.create(title=title, mark=mark, price=price, email=email, phone_number=phone, name=request.user)
+        return HttpResponseRedirect('/')
 
 
-def docs(request):
-    return render(request, 'api_docs.html')
+class FindPageView(View):
+    def get(self, request):
+        if request.GET:
+            find_word = request.GET['find_word']
+
+            found = Post.objects.values('id', 'title', 'mark', 'price', 'phone_number', 'email') \
+                .filter(
+                Q(title__icontains=find_word.lower()) |
+                Q(mark__icontains=find_word.lower()))
+            context = {'posts': found}
+            return render(request, 'find_page.html', context)
+
+
+class PopularView(View):
+    def get(self, request):
+        populars = Post.objects.values('mark')\
+            .annotate(mark_count=Count('mark'))\
+            .filter(mark_count__gte=5)\
+            .order_by('mark_count')\
+            .reverse()
+
+        context = {'posts': populars}
+        return render(request, 'popular.html', context)
+
+
+class DocsView(View):
+    def get(self, request):
+        return render(request, 'api_docs.html')
 
 
 def api_get_all(request):

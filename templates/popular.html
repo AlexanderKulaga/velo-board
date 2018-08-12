@@ -29,6 +29,12 @@
                 <li><a href={% url 'landing' %}>Главная</a></li>
                 <li class="active"><a href={% url 'popular' %}>Популярные</a></li>
                 <li><a href={% url 'docs' %}>API docs</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href={% url 'logout' %}>Выход</a></li>
+                {% else %}
+                    <li><a href={% url 'login' %}>Вход</a></li>
+                    <li><a href={% url 'register' %}>Регистрация</a></li>
+                {% endif %}
                 <li>
                     <form action={% url 'find_page' %} method="get" class="form-search" >
                         <div class="input-append search-nav">

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" >
+<html lang="ru">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -17,12 +17,10 @@
     <![endif]-->
 
     {% load static %}
-
     <link rel="stylesheet" href="{% static 'velostore/css/bootstrap.min.css' %}">
     <link rel="stylesheet" href="{% static 'velostore/css/bootstrap-theme.min.css' %}">
     <link rel="stylesheet" href="{% static 'velostore/css/styles.css' %}">
 </head>
-
 <body>
     <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
       <div class="container">
@@ -39,13 +37,9 @@
           <ul class="nav navbar-nav">
             <li><a href={% url 'landing' %}>Главная</a></li>
             <li><a href={% url 'popular' %}>Популярные</a></li>
-            <li class="active"><a href={% url 'docs' %}>API docs</a></li>
-            {% if user.is_authenticated %}
-              <li><a href={% url 'logout' %}>Выход</a></li>
-            {% else %}
-              <li><a href={% url 'login' %}>Вход</a></li>
-              <li><a href={% url 'register' %}>Регистрация</a></li>
-            {% endif %}
+            <li><a href={% url 'docs' %}>API docs</a></li>
+            <li><a href={% url 'login' %}>Вход</a></li>
+            <li class="active"><a href={% url 'register' %}>Регистрация</a></li>
             <li>
                 <form action={% url 'find_page' %} method="get" class="form-search" >
                     <div class="input-append search-nav">
@@ -59,20 +53,43 @@
       </div><!-- /.container -->
     </div><!-- /.navbar -->
 
-    <div class="container content doc-block">
+
+    <div class="container">
+        <form action="" method="post" class="content">
+        {% csrf_token %}
+
+        <p>
+            <label for="id_username">Имя пользователя:</label>
+            <input type="text" name="username" maxlength="150" autofocus="" required="" id="id_username">
+            <span class="helptext">Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.</span>
+        </p>
+        <p>
+            <label for="id_password1">Пароль:</label>
+            <input type="password" name="password1" required="" id="id_password1">
+            <span class="helptext"></span>
+        </p>
         <ul>
-            <li><b>Для получения всех постов:</b> GET /api/get_all/</li>
-            <li><b>Для получения постов со страницы:</b> GET /api/get_page/{номер страницы}/</li>
-            <li><b>Для поиска по названию/марке детали:</b> GET /api/find?find_word={текст для поиска}</li>
-            <li><b>Для добавления поста:</b> GET /api/add?title={название}&mark={марка}&price={цена}&email={мейл}&
-            phone={телефон, без +, начинается с 7 например 79252679613}/ <br>Параметр price не обязателен</li>
-            <li><b>Для получения списка марок, детали которых встречаются чаще 5 раз,
-            отсортированных по количеству деталей этой марки:</b> GET /api/get_popular/</li>
+            <li>Ваш пароль не должен совпадать с вашим именем или другой персональной информацией или быть слишком похожим на неё.</li>
+            <li>Ваш пароль должен содержать как минимум 8 символов.</li>
+            <li>Ваш пароль не может быть одним из широко распространённых паролей.</li>
+            <li>Ваш пароль не может состоять только из цифр.</li>
         </ul>
 
-    </div><!--/.container-->
+        <p class="error">
+            {% for key, value in form.errors.items %}
+                {{ value }}
+            {% endfor %}
+        </p>
 
-    <script src="{% static 'velostore/js/jquery-3.3.1.min.js' %}"></script>
-    <script src="{% static 'velostore/js/bootstrap.min.js' %}"></script>
+        <p><label for="id_password2">Подтверждение пароля:</label> <input type="password" name="password2" required="" id="id_password2"> <span class="helptext">Для подтверждения введите, пожалуйста, пароль ещё раз.</span></p>
+
+        <button type="submit" class="btn btn-success back-button">Регистрация</button>
+    </form>
+    <a href= {% url 'landing' %}><button type="button" class="btn btn-primary back-button" >Вернуться</button></a>
+    </div>
+
+<script src="{% static 'velostore/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'velostore/js/bootstrap.min.js' %}"></script>
 </body>
 </html>
+

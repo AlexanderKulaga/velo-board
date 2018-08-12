@@ -39,6 +39,14 @@
             <li class="active"><a href={% url 'landing' %}>Главная</a></li>
             <li><a href={% url 'popular' %}>Популярные</a></li>
             <li><a href={% url 'docs' %}>API docs</a></li>
+
+            {% if user.is_authenticated %}
+              <li><a href={% url 'logout' %}>Выход</a></li>
+            {% else %}
+              <li><a href={% url 'login' %}>Вход</a></li>
+              <li><a href={% url 'register' %}>Регистрация</a></li>
+            {% endif %}
+
             <li>
                 <form action={% url 'find_page' %} method="get" class="form-search" >
                     <div class="input-append search-nav">
@@ -59,7 +67,10 @@
                     {% for post in posts %}
                         <div class="col-12 col-sm-12 col-lg-8 post-block">
                             <h4><b>Название:</b> {{ post.title }}</h4>
-                            <p><b>Марка:</b>{{ post.mark }}</p>
+                            {% if post.name != None %}
+                                <p><b>Автор:</b> {{ post.name }}</p>
+                            {% endif %}
+                            <p><b>Марка:</b> {{ post.mark }}</p>
                             <p><b>Цена:</b>
                             {% if post.price == None %}
                                 Не указана
@@ -73,20 +84,26 @@
                     {% endfor %}
                 </div><!--/row-->
             </div><!--/span-->
+
+            {% if user.is_authenticated %}
             <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
-
-            <form action={% url 'add' %} method="post" role="form">
-                {% csrf_token %}
-                <h2 class="form-signin-heading">Новое объявление</h2>
-                <input type="text" name="title" class="form-control" placeholder="Название*" maxlength="40" required>
-                <input type="text" name="mark" class="form-control" placeholder="Марка*" maxlength="40" required>
-                <input type="number" name="price" class="form-control" placeholder="Цена">
-                <input type="email" name="email" class="form-control" placeholder="Email*" maxlength="40" required>
-                <input type="tel" name="phone" class="form-control" id="phone" pattern="^\+7\d{3}\d{7}$" placeholder="Телефон*" maxlength="18" required>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Отправить</button>
-            </form>
-
+            Вы вошли как: {{ user }}
+                <form action={% url 'add' %} method="post" role="form">
+                    {% csrf_token %}
+                    <h2 class="form-signin-heading">Новое объявление</h2>
+                    <input type="text" name="title" class="form-control" placeholder="Название*" maxlength="40" required>
+                    <input type="text" name="mark" class="form-control" placeholder="Марка*" maxlength="40" required>
+                    <input type="number" name="price" class="form-control" placeholder="Цена">
+                    <input type="email" name="email" class="form-control" placeholder="Email*" maxlength="40" required>
+                    <input type="tel" name="phone" class="form-control" id="phone" pattern="^\+7\d{3}\d{7}$" placeholder="Телефон*" maxlength="18" required>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Отправить</button>
+                </form>
             </div>
+            {% else %}
+                <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar" role="navigation">
+                Чтобы добавить пост, <a href={% url 'login' %}>войдите</a>
+                </div>
+            {% endif %}
         </div><!--/row-->
 
         <div class="row">

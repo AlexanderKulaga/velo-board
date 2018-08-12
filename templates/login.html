@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Velo Catalog</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="http://bootstrap-3.ru/assets/ico/favicon.ico">
+    <title>Velo Catalog</title>
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
     {% load static %}
     <link rel="stylesheet" href="{% static 'velostore/css/bootstrap.min.css' %}">
@@ -11,6 +22,7 @@
     <link rel="stylesheet" href="{% static 'velostore/css/styles.css' %}">
 </head>
 <body>
+
     <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
       <div class="container">
         <div class="navbar-header">
@@ -27,12 +39,8 @@
             <li><a href={% url 'landing' %}>Главная</a></li>
             <li><a href={% url 'popular' %}>Популярные</a></li>
             <li><a href={% url 'docs' %}>API docs</a></li>
-            {% if user.is_authenticated %}
-              <li><a href={% url 'logout' %}>Выход</a></li>
-            {% else %}
-              <li><a href={% url 'login' %}>Вход</a></li>
-              <li><a href={% url 'register' %}>Регистрация</a></li>
-            {% endif %}
+            <li class="active"><a href={% url 'login' %}>Вход</a></li>
+            <li><a href={% url 'register' %}>Регистрация</a></li>
             <li>
                 <form action={% url 'find_page' %} method="get" class="form-search" >
                     <div class="input-append search-nav">
@@ -46,27 +54,26 @@
       </div><!-- /.container -->
     </div><!-- /.navbar -->
 
-      <div class="row">
-          <div class="col-xs-12 col-sm-9">
-              <div class="row">
-                    {% for post in posts %}
-                        <div class="col-6 col-sm-6 col-lg-4 popular-content post-block">
-                            <h4><b>Название:</b> {{ post.title }}</h4>
-                      <p><b>Марка:</b>{{ post.mark }}</p>
-                      <p><b>Цена:</b>
-                          {% if post.price == None %}
-                              Не указана
-                          {% else %}
-                              {{ post.price }}
-                          {% endif %}
-                      </p>
-                      <p><b>Email:</b> {{ post.email }}</p>
-                      <p><b>Телефон:</b> {{ post.phone_number }}</p>
-                        </div><!--/span-->
-                    {% endfor %}
-              </div><!--/row-->
-          </div><!--/span-->
-      </div>
-        <a href= {% url 'landing' %}><button type="button" class="btn btn-primary back-button" >Вернуться</button></a>
+
+
+    <div class="container">
+        <form action='' method='post' class="content">{% csrf_token %}
+        <label for="username">Логин:</label>
+        <input type="text" name="username" value="" id="username">
+        <label for="password">Пароль:</label>
+        <input type="password" name="password" value="" id="password">
+        <input type="submit" value="Вход" class="btn btn-success"/>
+        <input type="hidden" name="next" value="{{ next|escape }}" />
+    </form>
+    {% if form.errors %}
+        <p class="error">Неверный логин/пароль</p>
+    {% endif %}
+
+  <p><a href={% url 'register' %}>Нет аккаунта?</a></p>
+  <p><a href= {% url 'landing' %}><button type="button" class="btn btn-primary back-button" >Вернуться</button></a></p>
+    </div>
+
+<script src="{% static 'velostore/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'velostore/js/bootstrap.min.js' %}"></script>
 </body>
 </html>

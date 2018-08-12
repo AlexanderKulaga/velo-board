@@ -3,6 +3,7 @@ from django.db import models
 
 class Post(models.Model):
     id = models.AutoField(primary_key=True)
+    name = models.CharField(null=True, max_length=50)
     title = models.CharField(max_length=50)
     mark = models.CharField(max_length=50)
     price = models.CharField(null=True, blank=True, max_length=50)  # храню в char field т.к. кроме как выводить с ней ничего делать не надо
