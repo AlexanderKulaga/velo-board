@@ -1,14 +1,12 @@
 import re
+from veloproject.velostore.models import Post
 
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm
-from django.views.generic import TemplateView, FormView
+from django.views.generic import FormView
 from django.views.generic.base import View
-from django.contrib import auth
 from django.contrib.auth import login
 from django.contrib.auth import logout
-
-from veloproject.velostore.models import Post
 from django.db.models import Count, Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
@@ -93,7 +91,7 @@ class FindPageView(View):
         if request.GET:
             find_word = request.GET['find_word']
 
-            found = Post.objects.values('id', 'title', 'mark', 'price', 'phone_number', 'email') \
+            found = Post.objects.values('id', 'title', 'name', 'mark', 'price', 'phone_number', 'email') \
                 .filter(
                 Q(title__icontains=find_word.lower()) |
                 Q(mark__icontains=find_word.lower()))
@@ -119,7 +117,7 @@ class DocsView(View):
 
 
 def api_get_all(request):
-    posts = Post.objects.values('id', 'title', 'mark', 'price', 'email', 'phone_number')
+    posts = Post.objects.values('id', 'title', 'name', 'mark', 'price', 'email', 'phone_number')
 
     return HttpResponse(json.dumps(list(posts), ensure_ascii=False),
                         content_type='application/json; charset=UTF-8',
@@ -127,7 +125,7 @@ def api_get_all(request):
 
 
 def api_get_page(request, page_number=1):
-    posts = Post.objects.values('id', 'title', 'mark', 'price', 'email', 'phone_number').order_by('id').reverse()
+    posts = Post.objects.values('id', 'title', 'name', 'mark', 'price', 'email', 'phone_number').order_by('id').reverse()
     current_page = Paginator(posts, 4)
     posts = current_page.page(page_number)
 
@@ -151,7 +149,7 @@ def api_get_popular(request):
 def api_find_word(request):
     find_word = request.GET.get('find_word')
     if find_word:
-        found = Post.objects.values('id', 'title', 'mark', 'phone_number', 'email')\
+        found = Post.objects.values('id', 'title',  'name',  'mark', 'phone_number', 'email')\
             .filter(
             Q(title__icontains=find_word.lower())|
             Q(mark__icontains=find_word.lower()))

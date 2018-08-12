@@ -50,9 +50,12 @@
           <div class="col-xs-12 col-sm-9">
               <div class="row">
                     {% for post in posts %}
-                        <div class="col-6 col-sm-6 col-lg-4 popular-content post-block">
-                            <h4><b>Название:</b> {{ post.title }}</h4>
-                      <p><b>Марка:</b>{{ post.mark }}</p>
+                      <div class="col-6 col-sm-6 col-lg-4 popular-content post-block">
+                      <h4><b>Название:</b> {{ post.title }}</h4>
+                      {% if post.name != None %}
+                          <p><b>Автор:</b> {{ post.name }}</p>
+                      {% endif %}
+                      <p><b>Марка:</b> {{ post.mark }}</p>
                       <p><b>Цена:</b>
                           {% if post.price == None %}
                               Не указана
